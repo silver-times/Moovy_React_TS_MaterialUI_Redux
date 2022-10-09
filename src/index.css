@@ -14,7 +14,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  min-height: 100vh;
   background-color: rgba(0, 255, 255, 0.422);
 }
 
@@ -28,4 +27,13 @@ code {
   justify-content: space-between;
   margin: 0;
   padding: 0;
+}
+
+.noContent {
+  background-image: url("./assets/NotFound.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding: 250px 0;
+  margin: 40px 0;
 }

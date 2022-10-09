@@ -10,21 +10,33 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { SinglePageMovie } from "../types";
 import Rating from "@mui/material/Rating";
+import { NoImage } from "../utils";
+import { useDispatch } from "react-redux";
+import { addRatedMovies } from "../store/ratingSlice/ratingSlice";
+import { RatedMovie } from "../types";
 
 const DetailsPage = () => {
   const { imdbID } = useParams();
   const [singleMovie, setSingleMovie] = useState<SinglePageMovie>();
   const [value, setValue] = useState<number | null>(4);
+  const [alert, setAlert] = useState(false);
+  const dispatch = useDispatch();
 
   const getSingleMovieData = async () => {
     const URL = `http://www.omdbapi.com/?apikey=991f5194&i=${imdbID}`;
     const res = await axios.get(URL);
-    setSingleMovie(res.data);
+    const movie = res.data;
+    return movie;
     // return res.data.Search;
     // dispatch(addMovies(res.data.Search));
   };
 
-  getSingleMovieData();
+  const addRatingHandler = async (value: number | null) => {
+    setValue(value);
+    const movie = await getSingleMovieData();
+    dispatch(addRatedMovies(movie));
+    setAlert(true);
+  };
 
   return (
     <Container
@@ -51,27 +63,38 @@ const DetailsPage = () => {
           component="img"
           height="440"
           width="300"
-          image={singleMovie?.Poster}
+          image={singleMovie?.Poster === "N/A" ? NoImage : singleMovie?.Poster}
           sx={{ objectFit: "contain", marginTop: "30px" }}
           alt={singleMovie?.Title}
         />
-        <Rating
-          name="simple-controlled"
-          value={value}
-          size="large"
-          sx={{ marginTop: 5 }}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        />
-        <Typography
-          sx={{ fontFamily: "Open Sans", marginBottom: 5 }}
-          gutterBottom
-          variant="h5"
-          component="div"
-        >
-          Rate the movie!
-        </Typography>
+        {!alert ? (
+          <div>
+            <Rating
+              name="simple-controlled"
+              value={value}
+              size="large"
+              sx={{ marginTop: 5 }}
+              onChange={(e, newValue) => addRatingHandler(newValue)}
+            />
+            <Typography
+              sx={{ fontFamily: "Open Sans", marginBottom: 5 }}
+              gutterBottom
+              variant="h5"
+              component="div"
+            >
+              Rate the movie!
+            </Typography>
+          </div>
+        ) : (
+          <Typography
+            sx={{ fontFamily: "Open Sans", fontSize: "20px", marginBottom: 5 }}
+            gutterBottom
+            variant="overline"
+            component="div"
+          >
+            Thankyou for Rating!
+          </Typography>
+        )}
       </Card>
       <Card
         sx={{

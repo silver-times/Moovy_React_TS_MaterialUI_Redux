@@ -6,9 +6,11 @@ import { store } from "./store/configureStore";
 import Homepage from "./pages/Homepage";
 import DetailsPage from "./pages/DetailsPage";
 import RatingsPage from "./pages/RatingsPage";
+import NotFoundPage from "./pages/NotFoundPage";
 // importing components
 import Navbar from "./components/Navbar";
 import theme from "./styles/theme";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -20,7 +22,9 @@ const App = () => {
             <Route path="/" element={<Homepage />} />
             <Route path="/details/:imdbID" element={<DetailsPage />} />
             <Route path="/ratings" element={<RatingsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          <Footer />
         </BrowserRouter>
       </ThemeProvider>
     </Provider>

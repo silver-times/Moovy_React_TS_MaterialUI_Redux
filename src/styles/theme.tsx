@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { makeStyles } from "@mui/material";
 
 export const Colors = {
   primary: "#5f2c3e",

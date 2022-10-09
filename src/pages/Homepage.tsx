@@ -4,31 +4,34 @@ import SearchBar from "../components/SearchBar";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import MovieCard from "../components/MovieCard";
-import { Movie } from "../types/index";
 import { useDispatch, useSelector } from "react-redux";
 import { addMovies, getAllMovies } from "../store/movieSlice/movieSlice";
-import Footer from "../components/Footer";
+import PaginationComponent from "../components/PaginationComponent";
+import NoContentFound from "../components/NoContentFound";
+import { Typography, Box } from "@mui/material";
+
+const MOVIES_PER_PAGE: number = 10;
+let TOTAL_NUMBER_OF_PAGES: number;
 
 const Homepage = () => {
-  const [movieList, setMovieList] = useState([] as Movie[]);
   const [searchedMovie, setSearchedMovie] = useState("");
   const [searchedYear, setSearchedYear] = useState("");
+  const [page, setPage] = useState(1);
+
   const dispatch = useDispatch();
   const movies = useSelector(getAllMovies);
 
   const getMovieData = async () => {
-    // const URL = `http://www.omdbapi.com/?apikey=991f5194&s=${searchedMovie}&y=${searchedYear}`;
-    const URL = `http://www.omdbapi.com/?apikey=991f5194&s=sally&page=2`;
+    const URL = `http://www.omdbapi.com/?apikey=991f5194&s=${searchedMovie}&y=${searchedYear}&type=movie&page=${page}`;
+    // const URL = `http://www.omdbapi.com/?apikey=991f5194&s=sally&page=${page}&type=movie`;
     const res = await axios.get(URL);
-    console.log(res.data);
-    // setMovieList(res.data.Search);
-    // return res.data.Search;
+    TOTAL_NUMBER_OF_PAGES = Math.ceil(+res.data.totalResults / MOVIES_PER_PAGE);
     dispatch(addMovies(res.data.Search));
   };
 
   useEffect(() => {
     getMovieData();
-  }, [searchedMovie, searchedYear]);
+  }, [searchedMovie, searchedYear, page]);
 
   return (
     <div>
@@ -52,10 +55,21 @@ const Homepage = () => {
             ))}
           </Grid>
         ) : (
-          "No movie"
+          <Box sx={{ textAlign: "center", paddingY: 4 }}>
+            <NoContentFound />
+            <Typography variant="h2" color="text.secondary">
+              No movies found!
+            </Typography>
+          </Box>
+        )}
+        {searchedMovie && (
+          <PaginationComponent
+            page={page}
+            setPage={setPage}
+            totalNumberOfPages={TOTAL_NUMBER_OF_PAGES}
+          />
         )}
       </Container>
-      <Footer />
     </div>
   );
 };
