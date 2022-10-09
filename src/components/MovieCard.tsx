@@ -1,37 +1,27 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
-// import { MovieListType } from "../types/index";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Rating from "@mui/material/Rating";
-import { CardActionArea } from "@mui/material";
-import { Box, Toolbar, Typography } from "@mui/material";
+import {
+  CardActionArea,
+  Card,
+  CardMedia,
+  CardContent,
+  Rating,
+  Typography,
+} from "@mui/material";
 import { NoImage } from "../utils";
 import { useDispatch } from "react-redux";
 import { addRatedMovies } from "../store/ratingSlice/ratingSlice";
 import { RatedMovie } from "../types";
+import { getSingleMovieData } from "../API/MovieCardAPI";
 
 const MovieCard = ({ movie }: any) => {
-  const [value, setValue] = React.useState<number | null>(4);
+  const [value, setValue] = React.useState<number | null>(3);
   const [alert, setAlert] = useState(false);
   const dispatch = useDispatch();
-
-  const getSingleMovieData = async (id: number) => {
-    const URL = `http://www.omdbapi.com/?apikey=991f5194&i=${id}`;
-    const res = await axios.get(URL);
-    const gen = res.data.Genre;
-    return gen;
-    // return res.data.Search;
-    // dispatch(addMovies(res.data.Search));
-  };
 
   const addRatingHandler = async (value: number | null) => {
     setValue(value);
     const gen = await getSingleMovieData(movie.imdbID);
-    console.log(gen);
 
     const newMovie: RatedMovie = {
       imdbID: movie.imdbID,
@@ -42,7 +32,6 @@ const MovieCard = ({ movie }: any) => {
       Type: movie.Type,
       Rating: value,
     };
-    console.log(newMovie);
     dispatch(addRatedMovies(newMovie));
     setAlert(true);
   };

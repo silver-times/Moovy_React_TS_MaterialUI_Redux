@@ -1,38 +1,41 @@
 import { useState, useEffect } from "react";
-import Container from "@mui/material/Container";
-import SearchBar from "../components/SearchBar";
 import axios from "axios";
-import Grid from "@mui/material/Grid";
+import SearchBar from "../components/SearchBar";
 import MovieCard from "../components/MovieCard";
-import { useDispatch, useSelector } from "react-redux";
-import { addMovies, getAllMovies } from "../store/movieSlice/movieSlice";
-import PaginationComponent from "../components/PaginationComponent";
 import NoContentFound from "../components/NoContentFound";
-import { Typography, Box } from "@mui/material";
-
-const MOVIES_PER_PAGE: number = 10;
-let TOTAL_NUMBER_OF_PAGES: number;
+import { Container, Grid, Typography, Box } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../store";
+import { addMovies, getAllMovies } from "../store/movieSlice/movieSlice";
+import {
+  loadingOn,
+  loadingOff,
+  loadingState,
+} from "../store/loadingSlice/loadingSlice";
+import Loader from "../components/Loader";
 
 const Homepage = () => {
-  const [searchedMovie, setSearchedMovie] = useState("");
+  const [searchedMovie, setSearchedMovie] = useState("a");
   const [searchedYear, setSearchedYear] = useState("");
-  const [page, setPage] = useState(1);
 
-  const dispatch = useDispatch();
-  const movies = useSelector(getAllMovies);
+  const dispatch = useAppDispatch();
+  const movies = useAppSelector(getAllMovies);
+  const loading = useAppSelector(loadingState);
 
   const getMovieData = async () => {
-    const URL = `http://www.omdbapi.com/?apikey=991f5194&s=${searchedMovie}&y=${searchedYear}&type=movie&page=${page}`;
+    dispatch(loadingOn());
+    const URL = `http://www.omdbapi.com/?apikey=991f5194&s=${searchedMovie}&y=${searchedYear}&type=movie`;
     // const URL = `http://www.omdbapi.com/?apikey=991f5194&s=sally&page=${page}&type=movie`;
     const res = await axios.get(URL);
-    TOTAL_NUMBER_OF_PAGES = Math.ceil(+res.data.totalResults / MOVIES_PER_PAGE);
+    // TOTAL_NUMBER_OF_MOVIES = +res.data.totalResults;
+    // TOTAL_NUMBER_OF_PAGES = Math.ceil(+res.data.totalResults / MOVIES_PER_PAGE);
     dispatch(addMovies(res.data.Search));
+    dispatch(loadingOff());
+    // console.log(res.data);
   };
 
   useEffect(() => {
     getMovieData();
-  }, [searchedMovie, searchedYear, page]);
-
+  }, [searchedMovie, searchedYear]);
   return (
     <div>
       <Container
@@ -45,7 +48,7 @@ const Homepage = () => {
           setSearchedMovie={setSearchedMovie}
           setSearchedYear={setSearchedYear}
         />
-
+        {loading && <Loader />}
         {movies?.length ? (
           <Grid container alignItems="stretch" spacing={4}>
             {movies.map((movie) => (
@@ -62,13 +65,16 @@ const Homepage = () => {
             </Typography>
           </Box>
         )}
-        {searchedMovie && (
+        {/* {searchedMovie && (
           <PaginationComponent
-            page={page}
-            setPage={setPage}
-            totalNumberOfPages={TOTAL_NUMBER_OF_PAGES}
+          // postsPerPage={MOVIES_PER_PAGE}
+          // totalMovies={TOTAL_NUMBER_OF_MOVIES}
+          // page={page}
+          // setPage={setPage}
+          // totalNumberOfPages={TOTAL_NUMBER_OF_PAGES}
+          // paginateHandler={paginateHandler}
           />
-        )}
+        )} */}
       </Container>
     </div>
   );
