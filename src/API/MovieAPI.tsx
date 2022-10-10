@@ -1,5 +1,3 @@
-import axios from "axios";
+import { APIKey } from "./APIkey";
 
-export default axios.create({
-  baseURL: "https://www.omdbapi.com/",
-});
+export const baseURL = `https://www.omdbapi.com/?apikey=${APIKey}`;

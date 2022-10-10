@@ -7,7 +7,10 @@ import RatedMovieCard from "../components/RatedMovieCard";
 
 const RatingsPage = () => {
   const ratedMovies = useSelector(getAllRatedMovies);
-  console.log(ratedMovies);
+  const finalRatedMovies = ratedMovies.filter(
+    (ele, ind) =>
+      ind === ratedMovies.findIndex((elem) => elem.imdbID === ele.imdbID)
+  );
 
   return (
     <div>
@@ -18,11 +21,13 @@ const RatingsPage = () => {
         }}
       >
         <Grid container alignItems="stretch" spacing={4}>
-          {ratedMovies.map((movie) => (
-            <Grid item xs={6} md={3} key={movie.imdbID}>
-              <RatedMovieCard movie={movie} />
-            </Grid>
-          ))}
+          {finalRatedMovies
+            .filter((movie) => movie.imdbID)
+            .map((movie) => (
+              <Grid item xs={6} md={3} key={movie.imdbID}>
+                <RatedMovieCard movie={movie} />
+              </Grid>
+            ))}
         </Grid>
       </Container>
     </div>
