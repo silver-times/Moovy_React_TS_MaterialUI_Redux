@@ -1,4 +1,4 @@
-import { Container, Box, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import SearchedMovies from "../components/SearchedMovies";
 
 const Homepage = () => {
