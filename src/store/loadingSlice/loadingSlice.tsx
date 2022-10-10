@@ -3,12 +3,12 @@ import { RootState } from "../configureStore";
 
 type LoadingSliceState = {
   loading: boolean;
-  welcome: boolean;
+  errorAlert: boolean;
 };
 
 const initialState: LoadingSliceState = {
   loading: false,
-  welcome: true,
+  errorAlert: false,
 };
 
 export const loadingSlice = createSlice({
@@ -21,15 +21,15 @@ export const loadingSlice = createSlice({
     loadingOff(state) {
       state.loading = false;
     },
-    welcomeOn(state) {
-      state.welcome = true;
+    errorAlertOn(state) {
+      state.errorAlert = true;
     },
-    welcomeOff(state) {
-      state.welcome = false;
+    errorAlertOff(state) {
+      state.errorAlert = false;
     },
   },
 });
 
-export const { loadingOn, loadingOff, welcomeOn, welcomeOff } =
+export const { loadingOn, loadingOff, errorAlertOn, errorAlertOff } =
   loadingSlice.actions;
 export const loadingState = (state: RootState) => state.loading;

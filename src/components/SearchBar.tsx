@@ -14,7 +14,6 @@ const SearchBar = ({ setSearchedMovie, setSearchedYear }: SearchBarProps) => {
 
   const searchTermHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(movieField, yearField);
 
     setSearchedMovie(movieField);
     setSearchedYear(yearField);

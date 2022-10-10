@@ -5,7 +5,7 @@ import { AppBar, Toolbar } from "@mui/material";
 
 const NotFoundPage = () => {
   return (
-    <Box sx={{ textAlign: "center", paddingY: 4 }}>
+    <Box sx={{ textAlign: "center", paddingY: 8 }}>
       <NoContentFound />
       <Typography variant="h2" color="text.secondary">
         404 Page Not Found!

@@ -8,6 +8,8 @@ import {
   loadingOn,
   loadingOff,
   loadingState,
+  errorAlertOn,
+  errorAlertOff,
 } from "../store/loadingSlice/loadingSlice";
 import { addMovies, getAllMovies } from "../store/movieSlice/movieSlice";
 import SearchBar from "./SearchBar";
@@ -26,12 +28,18 @@ const SearchedMovies = () => {
 
   const dispatch = useAppDispatch();
   const movies = useAppSelector(getAllMovies);
-  const { loading, welcome } = useAppSelector(loadingState);
+  const { loading, errorAlert } = useAppSelector(loadingState);
 
   const getMovieData = async () => {
     dispatch(loadingOn());
+    // dispatch(welcomeOff());
     const URL = `${baseURL}&s=${searchedMovie}&y=${searchedYear}&type=movie&page=${page}`;
     const res = await axios.get(URL);
+    if (res.data.Error === "Movie not found!") {
+      dispatch(errorAlertOn());
+    } else {
+      dispatch(errorAlertOff());
+    }
 
     TOTAL_MOVIES = +res.data.totalResults;
     TOTAL_PAGES = Math.ceil(TOTAL_MOVIES / 10);
@@ -51,6 +59,18 @@ const SearchedMovies = () => {
         setSearchedYear={setSearchedYear}
       />
       {loading && <Loader />}
+      {errorAlert ? (
+        <Box sx={{ textAlign: "center", paddingY: 4 }}>
+          <Typography variant="h2" color="text.secondary">
+            Sorry, no movie found!
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            Please try again!
+          </Typography>
+        </Box>
+      ) : (
+        ""
+      )}
       {movies?.length ? (
         <Box
           sx={{
