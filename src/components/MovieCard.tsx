@@ -7,10 +7,9 @@ import {
   CardContent,
   Rating,
   Typography,
-  Button,
 } from "@mui/material";
 import { NoImage } from "../utils";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../store";
 import { addRatedMovies } from "../store/ratingSlice/ratingSlice";
 import { RatedMovie } from "../types";
 import { getSingleMovieData } from "../API/MovieCardAPI";
@@ -18,7 +17,7 @@ import { getSingleMovieData } from "../API/MovieCardAPI";
 const MovieCard = ({ movie }: any) => {
   const [value, setValue] = React.useState<number | null>(3);
   const [alert, setAlert] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const addRatingHandler = async (value: number | null) => {
     setValue(value);
@@ -38,65 +37,70 @@ const MovieCard = ({ movie }: any) => {
   };
 
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        height: "100%",
-        ":hover": {
-          boxShadow: 20, // theme.shadows[20]
-        },
-        borderRadius: "2%",
-      }}
-      elevation={10}
-    >
-      <CardActionArea>
-        <Link to={`/details/${movie.imdbID}`}>
-          <CardMedia
-            component="img"
-            height="400"
-            image={movie.Poster === "N/A" ? NoImage : movie.Poster}
-            alt={movie.Title}
-          />
-        </Link>
-      </CardActionArea>
-
-      <CardContent
+    <div className="cardZoom">
+      <Card
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          maxWidth: 345,
+          height: "100%",
+          ":hover": {
+            boxShadow: 40,
+          },
+          borderRadius: "2%",
         }}
+        elevation={10}
       >
-        <Typography gutterBottom variant="h6" component="div">
-          {movie.Title}
-        </Typography>
-        <Typography
-          sx={{ fontFamily: "Open Sans" }}
-          gutterBottom
-          variant="h6"
-          component="div"
+        <CardActionArea>
+          <Link to={`/details/${movie.imdbID}`}>
+            <CardMedia
+              component="img"
+              height="400"
+              image={movie.Poster === "N/A" ? NoImage : movie.Poster}
+              alt={movie.Title}
+            />
+          </Link>
+        </CardActionArea>
+
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          {movie?.Year}
-        </Typography>
-        {!alert ? (
-          <Rating
-            name="simple-controlled"
-            value={value}
-            size="large"
-            onChange={(e, newValue) => addRatingHandler(newValue)}
-          />
-        ) : (
+          <Typography gutterBottom variant="h6" component="div">
+            {movie.Title}
+          </Typography>
           <Typography
-            sx={{ fontFamily: "Open Sans", fontSize: "14px", marginBottom: 5 }}
+            sx={{ fontFamily: "Open Sans" }}
             gutterBottom
-            variant="overline"
+            variant="h6"
             component="div"
           >
-            Thankyou for Rating!
+            {movie?.Year}
           </Typography>
-        )}
-      </CardContent>
-    </Card>
+          {!alert ? (
+            <Rating
+              name="simple-controlled"
+              value={value}
+              size="large"
+              onChange={(e, newValue) => addRatingHandler(newValue)}
+            />
+          ) : (
+            <Typography
+              sx={{
+                fontFamily: "Open Sans",
+                fontSize: "14px",
+              }}
+              gutterBottom
+              variant="overline"
+              component="div"
+            >
+              Thankyou for Rating!
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

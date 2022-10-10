@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import axios from "axios";
+import { baseURL } from "../API/MovieAPI";
+import { useState, useEffect } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import NoContentFound from "../components/NoContentFound";
-import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../store";
 import {
   loadingOn,
@@ -14,12 +14,11 @@ import {
 import { addMovies, getAllMovies } from "../store/movieSlice/movieSlice";
 import SearchBar from "./SearchBar";
 import MovieCard from "./MovieCard";
-import Loader from "../components/Loader";
-import { baseURL } from "../API/MovieAPI";
 import PaginationComponent from "./PaginationComponent";
+import Loader from "../components/Loader";
 
-let TOTAL_MOVIES: number;
-let TOTAL_PAGES: number;
+export let TOTAL_MOVIES: number;
+export let TOTAL_PAGES: number;
 
 const SearchedMovies = () => {
   const [searchedMovie, setSearchedMovie] = useState("");
@@ -32,20 +31,21 @@ const SearchedMovies = () => {
 
   const getMovieData = async () => {
     dispatch(loadingOn());
-    // dispatch(welcomeOff());
+
     const URL = `${baseURL}&s=${searchedMovie}&y=${searchedYear}&type=movie&page=${page}`;
     const res = await axios.get(URL);
+
     if (res.data.Error === "Movie not found!") {
       dispatch(errorAlertOn());
     } else {
       dispatch(errorAlertOff());
     }
 
-    TOTAL_MOVIES = +res.data.totalResults;
-    TOTAL_PAGES = Math.ceil(TOTAL_MOVIES / 10);
-
     dispatch(addMovies(res.data.Search));
     dispatch(loadingOff());
+
+    TOTAL_MOVIES = +res.data.totalResults;
+    TOTAL_PAGES = Math.ceil(TOTAL_MOVIES / 10);
   };
 
   useEffect(() => {

@@ -1,11 +1,10 @@
-import React from "react";
-import LoaderComponent from "./LoaderComponent/LoaderComponent";
+import LoaderHelper from "./LoaderHelper/LoaderHelper";
 import { Box, Typography } from "@mui/material";
 
 const Loader = () => {
   return (
     <Box sx={{ textAlign: "center" }}>
-      <LoaderComponent />
+      <LoaderHelper />
       <Typography
         sx={{ fontFamily: "Open Sans" }}
         gutterBottom

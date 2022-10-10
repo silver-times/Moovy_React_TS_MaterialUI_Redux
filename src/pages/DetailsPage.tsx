@@ -21,15 +21,14 @@ import {
 } from "../store/loadingSlice/loadingSlice";
 import { useAppDispatch, useAppSelector } from "../store";
 import { addRatedMovies } from "../store/ratingSlice/ratingSlice";
-import Loader from "../components/Loader";
-import { RatedMovie } from "../types";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../API/MovieAPI";
+import Loader from "../components/Loader";
 
 const DetailsPage = () => {
   const { imdbID } = useParams();
   const [singleMovie, setSingleMovie] = useState<SinglePageMovie>();
-  const [value, setValue] = useState<number | null>(4);
+  const [value, setValue] = useState<number | null>(3);
   const [alert, setAlert] = useState(false);
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector(loadingState);
@@ -74,7 +73,7 @@ const DetailsPage = () => {
           <Container
             maxWidth="lg"
             sx={{
-              marginY: "30px",
+              marginY: "35px",
               marginX: "auto",
               display: "flex",
               flexDirection: "column",
@@ -142,7 +141,7 @@ const DetailsPage = () => {
                     sx={{
                       fontFamily: "Open Sans",
                       fontSize: "20px",
-                      marginBottom: 5,
+                      marginBottom: 15,
                     }}
                     gutterBottom
                     variant="overline"

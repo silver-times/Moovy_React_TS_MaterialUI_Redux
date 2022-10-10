@@ -8,7 +8,7 @@ import { addGenres } from "../store/ratingSlice/ratingSlice";
 import Filter from "../components/Filter";
 
 const RatingsPage = () => {
-  const [clickedGenre, setClickedGenre] = useState("");
+  const [clickedGenre, setClickedGenre] = useState<string>("");
   const dispatch = useAppDispatch();
   const { ratedMovies } = useAppSelector(getAllRatedMovies);
 
@@ -46,7 +46,6 @@ const RatingsPage = () => {
         {finalRatedMovies?.length ? (
           <Grid container alignItems="stretch" spacing={4}>
             {finalRatedMovies
-              .filter((movie) => movie.imdbID)
               .filter((movie) => movie.Genre.includes(clickedGenre))
               .map((movie) => (
                 <Grid item xs={6} md={3} key={movie.imdbID}>

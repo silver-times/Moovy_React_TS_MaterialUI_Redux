@@ -13,13 +13,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   background-color: rgba(0, 255, 255, 0.422);
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }
 
 #form-inputs {
@@ -34,6 +28,16 @@ code {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
-  padding: 250px 0;
+  padding: 230px 0;
   margin: 40px 0;
+}
+
+.cardZoom {
+  transition: transform 0.3s; /* Animation */
+}
+
+.cardZoom:hover {
+  transform: scale(
+    1.1
+  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }

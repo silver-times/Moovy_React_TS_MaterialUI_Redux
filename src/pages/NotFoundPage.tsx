@@ -1,7 +1,5 @@
 import NoContentFound from "../components/NoContentFound";
 import { Typography, Box } from "@mui/material";
-import Footer from "../components/Footer";
-import { AppBar, Toolbar } from "@mui/material";
 
 const NotFoundPage = () => {
   return (

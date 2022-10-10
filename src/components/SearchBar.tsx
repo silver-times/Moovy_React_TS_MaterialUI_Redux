@@ -1,8 +1,6 @@
-import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
-import { Box } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 type SearchBarProps = {
   setSearchedMovie: React.Dispatch<React.SetStateAction<string>>;
@@ -27,19 +25,26 @@ const SearchBar = ({ setSearchedMovie, setSearchedYear }: SearchBarProps) => {
       <form id="form-inputs" onSubmit={searchTermHandler}>
         <TextField
           id="outlined-basic"
-          variant="outlined"
+          variant="filled"
+          required
           label="Enter movie title"
           value={movieField}
           onChange={(e) => setMovieField(e.target.value)}
-          sx={{ width: "50%" }}
+          sx={{ width: "50%", color: "white !important" }}
+          inputProps={{
+            style: { fontSize: 25 },
+          }}
         />
         <TextField
           id="outlined-basic"
-          variant="outlined"
+          variant="filled"
           label="Enter year of release"
           value={yearField}
           onChange={(e) => setYearField(e.target.value)}
           sx={{ width: "50%", marginLeft: 1 }}
+          inputProps={{
+            style: { fontSize: 25 },
+          }}
         />
         <Button
           variant="contained"
