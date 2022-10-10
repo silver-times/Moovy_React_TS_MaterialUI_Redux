@@ -32,6 +32,7 @@ const DetailsPage = () => {
   const [alert, setAlert] = useState(false);
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector(loadingState);
+
   const navigate = useNavigate();
 
   const getSingleMovieData = async (imdbID: string | undefined) => {
