@@ -12,7 +12,7 @@ const Footer = () => {
         }}
       >
         <Typography variant="h6" align="center" gutterBottom>
-          Moovy <span>&copy;</span>2022 By Rajat Sharma
+          Moovy<span>&copy;</span>2022 By Rajat Sharma
         </Typography>
       </Toolbar>
     </AppBar>

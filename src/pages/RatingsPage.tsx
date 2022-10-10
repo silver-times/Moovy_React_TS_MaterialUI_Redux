@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import { getAllRatedMovies } from "../store/ratingSlice/ratingSlice";
-import Container from "@mui/material/Container";
+import { Container, Grid, Box, Typography } from "@mui/material";
 import { RatedMovie } from "../types";
-import Grid from "@mui/material/Grid";
 import RatedMovieCard from "../components/RatedMovieCard";
+import NoContentFound from "../components/NoContentFound";
 
 const RatingsPage = () => {
   const ratedMovies = useSelector(getAllRatedMovies);
@@ -20,15 +20,22 @@ const RatingsPage = () => {
           marginY: 4,
         }}
       >
-        <Grid container alignItems="stretch" spacing={4}>
-          {finalRatedMovies
-            .filter((movie) => movie.imdbID)
-            .map((movie) => (
-              <Grid item xs={6} md={3} key={movie.imdbID}>
-                <RatedMovieCard movie={movie} />
-              </Grid>
-            ))}
-        </Grid>
+        {finalRatedMovies?.length ? (
+          <Grid container alignItems="stretch" spacing={4}>
+            {finalRatedMovies
+              .filter((movie) => movie.imdbID)
+              .map((movie) => (
+                <Grid item xs={6} md={3} key={movie.imdbID}>
+                  <RatedMovieCard movie={movie} />
+                </Grid>
+              ))}
+          </Grid>
+        ) : (
+          <Box sx={{ textAlign: "center", paddingY: 4 }}>
+            <NoContentFound />
+            <Typography variant="h2" color="text.secondary"></Typography>
+          </Box>
+        )}
       </Container>
     </div>
   );

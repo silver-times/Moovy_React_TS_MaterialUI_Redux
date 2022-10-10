@@ -14,9 +14,15 @@ import SearchBar from "./SearchBar";
 import MovieCard from "./MovieCard";
 import Loader from "../components/Loader";
 import { baseURL } from "../API/MovieAPI";
+import PaginationComponent from "./PaginationComponent";
+
+let TOTAL_MOVIES: number;
+let TOTAL_PAGES: number;
+
 const SearchedMovies = () => {
   const [searchedMovie, setSearchedMovie] = useState("");
   const [searchedYear, setSearchedYear] = useState("");
+  const [page, setPage] = useState(1);
 
   const dispatch = useAppDispatch();
   const movies = useAppSelector(getAllMovies);
@@ -24,32 +30,47 @@ const SearchedMovies = () => {
 
   const getMovieData = async () => {
     dispatch(loadingOn());
-    const URL = `${baseURL}&s=${searchedMovie}&y=${searchedYear}&type=movie`;
-    // const URL = `http://www.omdbapi.com/?apikey=991f5194&s=sally&page=${page}&type=movie`;
+    const URL = `${baseURL}&s=${searchedMovie}&y=${searchedYear}&type=movie&page=${page}`;
     const res = await axios.get(URL);
+
+    TOTAL_MOVIES = +res.data.totalResults;
+    TOTAL_PAGES = Math.ceil(TOTAL_MOVIES / 10);
+
     dispatch(addMovies(res.data.Search));
     dispatch(loadingOff());
   };
 
   useEffect(() => {
     getMovieData();
-  }, [searchedMovie, searchedYear]);
+  }, [searchedMovie, searchedYear, page]);
 
   return (
-    <Box sx={{ marginY: "40px" }}>
+    <Box sx={{ marginTop: "40px" }}>
       <SearchBar
         setSearchedMovie={setSearchedMovie}
         setSearchedYear={setSearchedYear}
       />
       {loading && <Loader />}
       {movies?.length ? (
-        <Grid container alignItems="stretch" spacing={4}>
-          {movies.map((movie) => (
-            <Grid item xs={6} md={3} key={movie.imdbID}>
-              <MovieCard movie={movie} />
-            </Grid>
-          ))}
-        </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Grid container alignItems="stretch" spacing={4}>
+            {movies.map((movie) => (
+              <Grid item xs={6} md={3} key={movie.imdbID}>
+                <MovieCard movie={movie} />
+              </Grid>
+            ))}
+          </Grid>
+          <Box sx={{ marginTop: "60px", paddingBottom: "10px" }}>
+            <PaginationComponent setPage={setPage} totalPages={TOTAL_PAGES} />
+          </Box>
+        </Box>
       ) : (
         <Box sx={{ textAlign: "center", paddingY: 4 }}>
           <NoContentFound />
